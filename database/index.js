@@ -1,31 +1,11 @@
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+const { Pool } = require('pg');
 
-var db = mongoose.connection;
+const connection = {
+  user: 'duss',
+  host: 'localhost',
+  database: 'xylo',
+  password: '',
+  port: 5432,
+}
 
-db.on('error', function() {
-  console.log('mongoose connection error');
-});
-
-db.once('open', function() {
-  console.log('mongoose connected successfully');
-});
-
-var itemSchema = mongoose.Schema({
-  quantity: Number,
-  description: String
-});
-
-var Item = mongoose.model('Item', itemSchema);
-
-var selectAll = function(callback) {
-  Item.find({}, function(err, items) {
-    if(err) {
-      callback(err, null);
-    } else {
-      callback(null, items);
-    }
-  });
-};
-
-module.exports.selectAll = selectAll;
+const pool = new Pool(connection);

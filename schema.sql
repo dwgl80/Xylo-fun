@@ -1,14 +1,12 @@
-DROP DATABASE IF EXISTS test;
+DROP DATABASE IF EXISTS Xylo;
 
-CREATE DATABASE test;
+CREATE DATABASE Xylo;
 
-USE test;
-
-CREATE TABLE items (
-  id int NOT NULL AUTO_INCREMENT,
-  quantity integer NOT NULL,
-  description varchar(50) NOT NULL,
-  PRIMARY KEY (ID)
+CREATE TABLE songs (
+  id SERIAL,
+  name VARCHAR(255),
+  notes VARCHAR(1000)
+  PRIMARY KEY (id)
 );
 
 /*  Execute this file from the command line by typing:
