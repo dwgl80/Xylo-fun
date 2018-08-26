@@ -12,10 +12,12 @@ class Bar extends React.Component {
 
 
   render () {
-    const { note, playSynth, index } = this.props;
+    const { note, playSynth } = this.props;
     return (
-    <div className={note} onClick={(e) => playSynth(e)}>
+    <div className={`note ${note}`} onClick={(e) => playSynth(e)}>
+      <div>
       {note}
+      </div>
     </div>)
   }
 }
