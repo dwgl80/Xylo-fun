@@ -5,7 +5,7 @@ CREATE DATABASE Xylo;
 CREATE TABLE songs (
   id SERIAL,
   name VARCHAR(255),
-  notes VARCHAR(1000)
+  song VARCHAR[],
   PRIMARY KEY (id)
 );
 

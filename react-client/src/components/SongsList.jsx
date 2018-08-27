@@ -12,10 +12,11 @@ class SongsList extends React.Component {
 
 
   render () {
-    const {  } = this.props;
+    const { names } = this.props;
     return (
     <div className="songsList">
-      <h1>Song List</h1>
+      <div className="songList-title">Song List</div>
+      {names.map( name => <div className="song-name">{name}</div>)}
     </div>
     )
   }

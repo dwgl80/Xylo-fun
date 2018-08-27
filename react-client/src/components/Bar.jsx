@@ -5,20 +5,40 @@ class Bar extends React.Component {
     super(props);
     this.state = { 
     }
+    this.renderBar = this.renderBar.bind(this);
   }
 
-  componentDidMount() {
+  renderBar() {
+    const { note, playSynth, event } = this.props;
+    if (!event) {
+      return (
+        <div className={`note-click ${note}`} onClick={(e) => playSynth(e)}>
+          <div>
+            {note}
+          </div>
+        </div>
+      )
+    } else {
+      return (
+        <div className={`note-hover ${note}`} onMouseEnter={(e) => playSynth(e)}>
+          <div>
+            {note}
+          </div>
+        </div>
+      )
+    }
   }
-
-
+  
   render () {
-    const { note, playSynth } = this.props;
+    const { note, playSynth, event } = this.props;
     return (
-    <div className={`note ${note}`} onClick={(e) => playSynth(e)}>
-      <div>
-      {note}
-      </div>
-    </div>)
+    // <div className={`note ${note}`} onClick={(e) => playSynth(e)}>
+    //   <div>
+    //   {note}
+    //   </div>
+    // </div>
+    this.renderBar()
+    )
   }
 }
 

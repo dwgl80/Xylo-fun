@@ -12,16 +12,25 @@ class Xylophone extends React.Component {
     this.state = { 
       notes: ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'],
       songs: [],
-      recording: false
+      currSong: [],
+      names: ['yes'],
+      recording: false,
+      event: false,
     }
     this.playSynth = this.playSynth.bind(this);
     this.toggleRecord = this.toggleRecord.bind(this);
     this.playSong = this.playSong.bind(this);
-    this.playNote = this.playNote.bind(this);
+    this.switchClick = this.switchClick.bind(this);
+    this.renderNotes = this.renderNotes.bind(this);
   }
 
-  componentDidMount() {
-    
+  componentDidMount() {  
+  }
+
+  renderNotes() {
+    return (
+      <div>{this.state.songs}</div>
+    )
   }
 
   playSynth(e) {
@@ -32,10 +41,6 @@ class Xylophone extends React.Component {
     synth.triggerAttackRelease(note, '8n')
   }
 
-  playNote(note) {
-    synth.triggerAttackRelease(note, '8n');
-  }
-
   toggleRecord() {
     console.log(this.state.recording);
     this.setState( ({ recording }) => ({ recording: !recording }))
@@ -43,33 +48,37 @@ class Xylophone extends React.Component {
   }
 
   playSong() {
-    // let playlist = [];
-    // for (let i = 0; i < this.state.songs.length; i++) {
-    //   playlist.push([i, this.state.songs[i]]);
-    // }
     var seq = new Tone.Sequence( (time, note) => synth.triggerAttackRelease(note, "8n", time),this.state.songs, 0.5);
     seq.loop = 0;
     seq.start(0);
     Tone.Transport.start();
   }
 
+  switchClick() {
+    this.setState( ({ event }) => ({ event: !event }))
+  }
+
 
   render () {
-    const { notes, songs } = this.state;
+    const { notes, songs, event, recording, names } = this.state;
     return (
     <div>
+      <div className="cursor"></div>
       <h1>Xylo-Fun</h1>
-      <div>
-        <SongsList songs={songs} />
-      </div>
-    <div className="container">
-      {notes.map( (note, index) => <Bar key={index} note={note} playSynth={this.playSynth} />)}
+      <div className="container">
+        <div className="notes">
+          {notes.map( (note, index) => <Bar key={index} note={note} event={event} playSynth={this.playSynth} />)}
+        </div>
     </div>
-    <div>
-      <button type='button' onClick={this.toggleRecord}>Record</button>
-      <button type='button' onClick={this.playSong}>Play saved song</button>
+    {recording ? <div className='recording'>Recording...</div> : null}
+    {recording ? this.renderNotes() : null}
+      <div>
+        <button type='button' onClick={this.toggleRecord}>Record</button>
+        <button type='button' onClick={this.playSong}>Play saved song</button>
+        <button type='button' onClick={this.switchClick}>{event ? 'Switch to press mode' : 'Switch to hover mode'}</button>
       </div>
-      </div>
+      <SongsList songs={songs} names={names} />
+    </div>
     )
   }
 }
