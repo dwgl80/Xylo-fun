@@ -83,7 +83,7 @@ class Xylophone extends React.Component {
   playSong(song = this.state.currSong) {
     var seq = new Tone.Sequence( (time, note) => synth.triggerAttackRelease(note, "8n", time), song, 0.5);
     seq.loop = 0;
-    seq.start(0);
+    seq.start();
     Tone.Transport.start();
   }
 
@@ -92,7 +92,7 @@ class Xylophone extends React.Component {
   }
 
   nameSong() {
-    let songName = prompt("Name your song bitch!", "")
+    let songName = prompt("Name your song!", "")
     this.setState( ({ names }) => ({ names: [...names, songName]}));
     return songName;
   }
@@ -102,19 +102,18 @@ class Xylophone extends React.Component {
     const { notes, songs, event, recording, names } = this.state;
     return (
     <div>
-      <div className="cursor"></div>
       <h1>Xylo-Fun</h1>
       <div className="container">
         <div className="notes">
           {notes.map( (note, index) => <Bar key={index} note={note} event={event} playSynth={this.playSynth} />)}
         </div>
-    </div>
-    {recording ? <div className='recording'>Recording...</div> : null}
-    {recording ? this.renderNotes() : null}
+      </div>
+      {recording ? <div className="recording">Recording...</div> : null}
+      {recording ? this.renderNotes() : null}
       <div>
-        <button type='button' onClick={this.toggleRecord}>Record</button>
-        <button type='button' onClick={() => this.playSong()}>Playback</button>
-        <button type='button' onClick={this.switchClick}>{event ? 'Switch to press mode' : 'Switch to hover mode'}</button>
+        {recording ? <button className="record-button" type="button" onClick={this.toggleRecord}>Stop</button> : <button type="button" onClick={this.toggleRecord}>Record</button>}
+        <button type="button" onClick={() => this.playSong()}>Playback</button>
+        <button type="button" onClick={this.switchClick}>{event ? 'Switch to press mode' : 'Switch to hover mode'}</button>
       </div>
       <SongsList songs={songs} names={names} getSong={this.getSong}/>
     </div>
