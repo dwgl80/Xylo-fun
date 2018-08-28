@@ -16,6 +16,7 @@ class Xylophone extends React.Component {
       names: [],
       recording: false,
       event: false,
+      popup: false,
     }
     this.playSynth = this.playSynth.bind(this);
     this.toggleRecord = this.toggleRecord.bind(this);
@@ -26,6 +27,7 @@ class Xylophone extends React.Component {
     this.saveSong = this.saveSong.bind(this);
     this.getNames = this.getNames.bind(this);
     this.getSong = this.getSong.bind(this);
+    this.togglePopup = this.togglePopup.bind(this);
   }
 
   componentDidMount() {  
@@ -55,8 +57,11 @@ class Xylophone extends React.Component {
   } 
 
   renderNotes() {
+    let notes = this.state.currSong;
     return (
-      <div>{this.state.currSong}</div>
+      <div className="record-list">
+      {notes.map( note => <span className="record-note">{note}</span>)}
+      </div>
     )
   }
 
@@ -91,6 +96,10 @@ class Xylophone extends React.Component {
     this.setState( ({ event }) => ({ event: !event }));
   }
 
+  togglePopup() {
+    this.setState( ({ popup }) => ({ popup: !popup }));
+  }
+
   nameSong() {
     let songName = prompt("Name your song!", "")
     this.setState( ({ names }) => ({ names: [...names, songName]}));
@@ -99,23 +108,23 @@ class Xylophone extends React.Component {
 
 
   render () {
-    const { notes, songs, event, recording, names } = this.state;
+    const { notes, songs, event, recording, names, popup } = this.state;
     return (
     <div>
       <h1>Xylo-Fun</h1>
+      {recording ? this.renderNotes() : null}
+      {popup ? <SongsList songs={songs} names={names} getSong={this.getSong} togglePopup={this.togglePopup}/> : <div className="show-list" onMouseEnter={this.togglePopup}>Show Song List</div>}
       <div className="container">
         <div className="notes">
           {notes.map( (note, index) => <Bar key={index} note={note} event={event} playSynth={this.playSynth} />)}
         </div>
       </div>
       {recording ? <div className="recording">Recording...</div> : null}
-      {recording ? this.renderNotes() : null}
       <div>
         {recording ? <button className="record-button" type="button" onClick={this.toggleRecord}>Stop</button> : <button type="button" onClick={this.toggleRecord}>Record</button>}
         <button type="button" onClick={() => this.playSong()}>Playback</button>
         <button type="button" onClick={this.switchClick}>{event ? 'Switch to press mode' : 'Switch to hover mode'}</button>
       </div>
-      <SongsList songs={songs} names={names} getSong={this.getSong}/>
     </div>
     )
   }
